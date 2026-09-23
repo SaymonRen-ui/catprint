@@ -1,0 +1,175 @@
+<UserControl x:Class="CatPrint.Views.DocEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CatPrint.Views">
+    <Grid Background="{DynamicResource AppBg}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ======= ТОНКАЯ ЛЕНТА ======= -->
+        <Border Grid.Row="0" Background="{DynamicResource PanelBg}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal" Margin="10,7" VerticalAlignment="Center">
+                    <Button x:Name="BtnAddImage" Content="🖼" Height="32" Width="40" FontSize="15" Padding="2"
+                            Click="BtnAddImage_Click" ToolTip="Вставить картинку"/>
+                    <Button x:Name="BtnEmoji" Content="😀" Height="32" Width="40" FontSize="15" Padding="2"
+                            Margin="6,0,0,0" Click="BtnEmoji_Click" ToolTip="Эмодзи (или Win+. прямо на бумаге)"/>
+                    <Button x:Name="BtnAddDivider" Content="━" Height="32" Width="40" FontSize="14" Padding="2"
+                            Margin="6,0,0,0" Click="BtnAddDivider_Click" ToolTip="Разделитель"/>
+                    <Button x:Name="BtnAddGap" Content="⇕" Height="32" Width="40" FontSize="14" Padding="2"
+                            Margin="6,0,0,0" Click="BtnAddGap_Click" ToolTip="Отступ"/>
+                    <Button x:Name="BtnAddQr" Content="QR" Height="32" Width="46" FontSize="13" Padding="2"
+                            Margin="6,0,0,0" Click="BtnAddQr_Click" ToolTip="QR-код"/>
+
+                    <Border Width="1" Background="{DynamicResource BorderBrush}" Margin="12,3"/>
+
+                    <Button x:Name="BtnTplChecklist" Content="☰" Height="32" Width="40" FontSize="15" Padding="2"
+                            Click="BtnTplChecklist_Click" ToolTip="Шаблон: список"/>
+                    <Button x:Name="BtnTplNote" Content="✎" Height="32" Width="40" FontSize="15" Padding="2"
+                            Margin="6,0,0,0" Click="BtnTplNote_Click" ToolTip="Шаблон: заметка"/>
+                    <Button x:Name="BtnTplHeader" Content="H" Height="32" Width="40" FontSize="15" Padding="2"
+                            Margin="6,0,0,0" Click="BtnTplHeader_Click" ToolTip="Шаблон: заголовок"/>
+
+                    <Border Width="1" Background="{DynamicResource BorderBrush}" Margin="12,3"/>
+
+                    <Button x:Name="BtnUndo" Content="↩" Height="32" Width="38" FontSize="15" Padding="2"
+                            Click="BtnUndo_Click" ToolTip="Отменить (Ctrl+Z)"/>
+                    <Button x:Name="BtnRedo" Content="↪" Height="32" Width="38" FontSize="15" Padding="2"
+                            Margin="4,0,0,0" Click="BtnRedo_Click" ToolTip="Вернуть (Ctrl+Y)"/>
+
+                    <Border Width="1" Background="{DynamicResource BorderBrush}" Margin="12,3"/>
+
+                    <ComboBox x:Name="CmbFont" Width="150" Height="32"
+                              SelectionChanged="FmtFont_Changed" ToolTip="Шрифт"/>
+                    <ComboBox x:Name="CmbSize" Width="62" Height="32" Margin="6,0,0,0"
+                              IsEditable="True" SelectionChanged="FmtSize_Changed"
+                              LostFocus="FmtSize_LostFocus" ToolTip="Размер"/>
+                    <ToggleButton x:Name="TogB" Content="Ж" Width="34" Height="32" Margin="6,0,0,0"
+                                  FontWeight="Bold" Click="FmtBold_Click" ToolTip="Жирный"/>
+                    <ToggleButton x:Name="TogI" Content="К" Width="34" Height="32" Margin="4,0,0,0"
+                                  FontStyle="Italic" Click="FmtItalic_Click" ToolTip="Курсив"/>
+                    <ToggleButton x:Name="TogU" Content="Ч" Width="34" Height="32" Margin="4,0,0,0"
+                                  Click="FmtUnderline_Click" ToolTip="Подчёркнутый">
+                        <ToggleButton.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Ч" TextDecorations="Underline"/>
+                            </DataTemplate>
+                        </ToggleButton.ContentTemplate>
+                    </ToggleButton>
+
+                    <Border Width="1" Background="{DynamicResource BorderBrush}" Margin="12,3"/>
+
+                    <ToggleButton x:Name="AlL" Content="◀≡" Width="38" Height="32" Click="Align_Click" Tag="0" ToolTip="По левому краю"/>
+                    <ToggleButton x:Name="AlC" Content="≡" Width="38" Height="32" Margin="4,0,0,0" Click="Align_Click" Tag="1" ToolTip="По центру"/>
+                    <ToggleButton x:Name="AlR" Content="≡▶" Width="38" Height="32" Margin="4,0,0,0" Click="Align_Click" Tag="2" ToolTip="По правому краю"/>
+                    <ComboBox x:Name="CmbSpacing" Width="64" Height="32" Margin="6,0,0,0"
+                              SelectionChanged="Spacing_Changed" ToolTip="Межстрочный интервал">
+                        <ComboBoxItem Content="1,0" Tag="1.0"/>
+                        <ComboBoxItem Content="1,25" Tag="1.25"/>
+                        <ComboBoxItem Content="1,5" Tag="1.5"/>
+                        <ComboBoxItem Content="2,0" Tag="2.0"/>
+                    </ComboBox>
+                    <ComboBox x:Name="CmbFrame" Width="100" Height="32" Margin="6,0,0,0"
+                              SelectionChanged="CmbFrame_SelectionChanged" ToolTip="Рамка абзаца">
+                        <ComboBoxItem Content="Без рамки"/>
+                        <ComboBoxItem Content="Тонкая"/>
+                        <ComboBoxItem Content="Толстая"/>
+                        <ComboBoxItem Content="Двойная"/>
+                        <ComboBoxItem Content="Волнистая"/>
+                        <ComboBoxItem Content="Пунктир"/>
+                        <ComboBoxItem Content="Точки"/>
+                        <ComboBoxItem Content="Зигзаг"/>
+                    </ComboBox>
+
+                    <Border Width="1" Background="{DynamicResource BorderBrush}" Margin="12,3"/>
+
+                    <TextBlock Text="Масштаб" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextMuted}" FontSize="12"/>
+                    <Slider x:Name="SldZoom" Width="90" Minimum="0.5" Maximum="2" Value="1"
+                            Margin="6,0,0,0" VerticalAlignment="Center"
+                            ValueChanged="SldZoom_Changed"/>
+                    <TextBlock x:Name="TxtZoom" Text="100%" VerticalAlignment="Center"
+                               Margin="4,0,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextMuted}"/>
+                    <CheckBox x:Name="ChkBit" Content="👁" Margin="10,0,0,0"
+                              VerticalAlignment="Center" FontWeight="SemiBold"
+                              Checked="ChkBit_Changed" Unchecked="ChkBit_Changed"
+                              ToolTip="Предпросмотр: как напечатается"/>
+                    <Button x:Name="BtnSaveRaster" Content="💾 PNG" Height="32" MinWidth="72"
+                            Margin="8,0,0,0" Click="BtnSaveRaster_Click"
+                            ToolTip="Сохранить точный 1-битный растр в PNG для проверки"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- ======= ХОЛСТ С БУМАГОЙ ======= -->
+        <Border Grid.Row="1" Background="{DynamicResource PaperArea}">
+            <ScrollViewer x:Name="PaperScroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ScaleHost" HorizontalAlignment="Center" Margin="0,18,0,60">
+                    <StackPanel.LayoutTransform>
+                        <ScaleTransform x:Name="PaperScale" ScaleX="1" ScaleY="1"/>
+                    </StackPanel.LayoutTransform>
+
+                    <Canvas x:Name="Ruler" Width="384" Height="20"/>
+
+                    <Border Width="384" Background="White" Margin="0,4,0,0">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="4" Opacity="0.35"/>
+                        </Border.Effect>
+                        <Grid Margin="0,10,0,10">
+                            <RichTextBox x:Name="PaperBox" Width="384" MinHeight="200"
+                                         Padding="0" BorderThickness="0"
+                                         Background="Transparent" Foreground="Black"
+                                         CaretBrush="Black" SelectionBrush="#BDD7FF"
+                                         FontFamily="Segoe UI, Segoe UI Emoji, Segoe UI Symbol"
+                                         FontSize="24"
+                                         IsUndoEnabled="False"
+                                         VerticalScrollBarVisibility="Disabled"
+                                         HorizontalScrollBarVisibility="Disabled"
+                                         SelectionChanged="PaperBox_SelectionChanged"
+                                         PreviewMouseLeftButtonDown="PaperBox_PreviewDown"
+                                         PreviewKeyDown="PaperBox_PreviewKeyDown"
+                                         TextChanged="PaperBox_TextChanged">
+                                <RichTextBox.Resources>
+                                    <!-- Поля текста через margin: ширина набора те же 368,
+                                         а картинки лежат в родных 384 1:1 без пересэмпла -->
+                                    <Style TargetType="Paragraph">
+                                        <Setter Property="Margin" Value="8,3,8,3"/>
+                                    </Style>
+                                </RichTextBox.Resources>
+                            </RichTextBox>
+                            <Image x:Name="BitPreview" Stretch="None"
+                                   HorizontalAlignment="Center" VerticalAlignment="Top"
+                                   Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- ======= НИЗ ======= -->
+        <Border Grid.Row="2" Background="{DynamicResource PanelBg}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0"
+                Padding="10,5">
+            <DockPanel>
+                <TextBlock x:Name="TxtDocInfo" FontSize="12"
+                           Foreground="{DynamicResource TextMuted}"
+                           VerticalAlignment="Center"/>
+                <TextBlock FontSize="12" Foreground="{DynamicResource TextMuted}"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Text="Двойной клик по картинке — настройки • Win+. — эмодзи Windows"/>
+            </DockPanel>
+        </Border>
+
+        <Popup x:Name="EmojiPopup" StaysOpen="False" Placement="Bottom">
+            <local:EmojiPicker x:Name="Picker"/>
+        </Popup>
+    </Grid>
+</UserControl>

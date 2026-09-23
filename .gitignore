@@ -1,0 +1,16 @@
+# .NET build outputs
+bin/
+obj/
+
+# Локальные артефакты публикации и установщика (раздаются через Releases)
+publish/
+installer-output/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+
+# OS
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,82 @@
+<Window x:Class="CatPrint.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки" Width="460" Height="640"
+        MinWidth="400" MinHeight="520"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource AppBg}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="14">
+        <StackPanel>
+            <GroupBox Header="🖨 Печать" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Пресеты" Foreground="{DynamicResource TextMuted}" FontSize="12"/>
+                    <UniformGrid Columns="4" Margin="0,4,0,0">
+                        <Button x:Name="PresetDoc" Content="📄 Текст" Margin="0,0,3,0"
+                                Click="Preset_Click" Tag="doc" ToolTip="Обычный документ"/>
+                        <Button x:Name="PresetPhoto" Content="📷 Фото" Margin="3,0,3,0"
+                                Click="Preset_Click" Tag="photo" ToolTip="Фото и картинки"/>
+                        <Button x:Name="PresetFast" Content="⚡ Быстро" Margin="3,0,3,0"
+                                Click="Preset_Click" Tag="fast" ToolTip="Черновик: быстро и бледно"/>
+                        <Button x:Name="PresetSafe" Content="🛡 Спокойно" Margin="3,0,0,0"
+                                Click="Preset_Click" Tag="safe" ToolTip="Медленно и надёжно"/>
+                    </UniformGrid>
+                    <TextBlock Margin="0,12,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Плотность: "/><Run x:Name="RunPower" Text="68% · Стандарт"/>
+                    </TextBlock>
+                    <Slider x:Name="SldPower" Minimum="0" Maximum="100" Value="61"
+                            Margin="0,4,0,0" ValueChanged="SldPower_Changed"
+                            ToolTip="Интенсивность термоголовки (0x30–0x7A)"/>
+                    <TextBlock Text="Порядок бит" Margin="0,10,0,0"
+                               Foreground="{DynamicResource TextMuted}" FontSize="12"/>
+                    <ComboBox x:Name="CmbBitOrder" Margin="0,4,0,0" SelectionChanged="CmbBitOrder_Changed">
+                        <ComboBoxItem Content="LSB first (как было)"/>
+                        <ComboBoxItem Content="MSB first"/>
+                    </ComboBox>
+                    <TextBlock Margin="0,10,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Пауза между строками: "/><Run x:Name="RunLineDelay" Text="15"/><Run Text=" мс"/>
+                    </TextBlock>
+                    <Slider x:Name="SldLineDelay" Minimum="5" Maximum="80" Value="15"
+                            Margin="0,4,0,0" ValueChanged="SldLineDelay_Changed"/>
+                    <TextBlock Margin="0,10,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Строк подряд: "/><Run x:Name="RunBlockLines" Text="40"/>
+                    </TextBlock>
+                    <Slider x:Name="SldBlockLines" Minimum="10" Maximum="100" Value="40"
+                            Margin="0,4,0,0" ValueChanged="SldBlockLines_Changed"/>
+                    <TextBlock Margin="0,10,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Пауза пачки: "/><Run x:Name="RunBlockPause" Text="0"/><Run Text=" мс"/>
+                    </TextBlock>
+                    <Slider x:Name="SldBlockPause" Minimum="0" Maximum="2000" Value="0"
+                            Margin="0,4,0,0" ValueChanged="SldBlockPause_Changed"/>
+                    <CheckBox x:Name="ChkSplit" Content="Делить длинные задания на части"
+                              Margin="0,12,0,0" FontWeight="SemiBold"
+                              Checked="ChkSplit_Changed" Unchecked="ChkSplit_Changed"/>
+                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Строк в части: "/><Run x:Name="RunSplitLines" Text="96"/>
+                    </TextBlock>
+                    <Slider x:Name="SldSplitLines" Minimum="60" Maximum="240" Value="96"
+                            Margin="0,4,0,0" ValueChanged="SldSplitLines_Changed"/>
+                    <TextBlock Margin="0,10,0,0" Foreground="{DynamicResource TextMuted}" FontSize="12">
+                        <Run Text="Пауза между частями: "/><Run x:Name="RunSplitPause" Text="1500"/><Run Text=" мс"/>
+                    </TextBlock>
+                    <Slider x:Name="SldSplitPause" Minimum="200" Maximum="3000" Value="1500"
+                            Margin="0,4,0,0" ValueChanged="SldSplitPause_Changed"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="🎨 Приложение" Margin="0,12,0,0" Padding="10">
+                <StackPanel>
+                    <TextBlock Foreground="{DynamicResource TextMuted}" FontSize="12" Text="Тема"/>
+                    <ComboBox x:Name="CmbTheme" Margin="0,4,0,0" SelectionChanged="CmbTheme_Changed">
+                        <ComboBoxItem Content="Светлая"/>
+                        <ComboBoxItem Content="Тёмная"/>
+                    </ComboBox>
+                    <Button x:Name="BtnReset" Content="Сбросить все настройки"
+                            Margin="0,12,0,0" Height="30" Click="BtnReset_Click"/>
+                </StackPanel>
+            </GroupBox>
+
+            <Button Content="Закрыть" Height="32" Margin="0,12,0,0"
+                    Click="BtnClose_Click"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
