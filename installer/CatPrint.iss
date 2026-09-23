@@ -2,11 +2,12 @@
 ; Как собрать:
 ;   1. Установи Inno Setup (https://jrsoftware.org/isdl.php) — 1 минута.
 ;   2. Открой этот файл в Inno Setup и нажми Compile (Ctrl+F9).
-;   3. Готовый CatPrint-Setup-1.0.0.exe появится в папке installer-output.
+;   3. Готовый CatPrint-Setup-1.0.1.exe появится в папке installer-output.
+; Однофайловый self-contained: ставится один CatPrint.exe без 300 DLL рантайма.
 ; Собирает self-contained версию: .NET на ПК пользователя НЕ нужен.
 
 #define MyAppName "CatPrint"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "CatPrint"
 #define MyAppExeName "CatPrint.exe"
 

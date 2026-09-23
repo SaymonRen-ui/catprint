@@ -17,8 +17,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Publish (self-contained win-x64)
-        run: dotnet publish src/CatPrint/CatPrint.csproj -c Release -r win-x64 --self-contained -o publish/standalone
+      - name: Publish (single-file self-contained win-x64)
+        run: |
+          dotnet publish src/CatPrint/CatPrint.csproj -c Release -r win-x64 --self-contained -o publish/standalone -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:SatelliteResourceLanguages="ru%3Ben"
 
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
