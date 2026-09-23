@@ -1,0 +1,32 @@
+name: build-setup
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish (self-contained win-x64)
+        run: dotnet publish src/CatPrint/CatPrint.csproj -c Release -r win-x64 --self-contained -o publish/standalone
+
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        run: & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' installer\CatPrint.iss
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: installer-output/CatPrint-Setup-*.exe
